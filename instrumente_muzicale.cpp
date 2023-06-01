@@ -15,12 +15,6 @@ enum class Instrument{
 };
 
 
-//O excpetie
-//
-//class nu_are_corzi:public std::exception{
-//    public:
-//
-//};
 
 
 class Numar_invalid: public std::exception{
@@ -43,6 +37,9 @@ const char *Tip_invalid::what() const noexcept {
 }
 
 
+
+
+
 class Printare{
 public:
     Printare();
@@ -56,6 +53,7 @@ Printare::Printare()=default;
 
 std::ostream &operator<<(std::ostream &out, Printare &ob){
     ob.afisare(out);
+    return out;
 }
 
 
@@ -82,7 +80,6 @@ std::string Id_gen<I>::get_ID() {
     return ID;
 }
 
-
 template<>
 Id_gen<Instrument::corzi>::Id_gen():ID("In_C"+std::to_string(id_curent++)) {}
 
@@ -91,6 +88,8 @@ Id_gen<Instrument::percutie>::Id_gen():ID("In_P"+std::to_string(id_curent++)) {}
 
 template<>
 Id_gen<Instrument::clape>::Id_gen():ID("In_Cl"+std::to_string(id_curent++)) {}
+
+
 
 
 
@@ -185,7 +184,7 @@ void Instr_corzi<C>::setNrCorzi(int nrcorzi){
 
 template<Calitate C>
 void Instr_corzi<C>::afisare(std::ostream &out) const {
-    Instrumente::afisare();
+    Instrumente::afisare(out);
     out<<nr_corzi<<" ";
 }
 
@@ -208,18 +207,149 @@ void Instr_corzi<Calitate::Inalta>::set_Pret() {
 
 template<Calitate C>
 class Instr_percutie: public Instrumente, public Id_gen<Instrument::percutie>{
+        int nr_tobe; double pret_magazin;
+    public:
+    Instr_percutie(const std::string numeproducator, const std::string tip, int nr_corzi, double pret);
 
+    int getNrTobe() const;
+
+    void setNrTobe(int nrtobe);
+
+    void afisare(std::ostream &out) const override;
+
+    void set_Pret() override;
 };
+
+template<Calitate C>
+Instr_percutie<C>::Instr_percutie(const std::string numeproducator, const std::string tip, int nr_tobe, double pret):
+        Instrumente(numeproducator,tip,pret), nr_tobe(nr_tobe){}
+
+template<Calitate C>
+int Instr_percutie<C>::getNrTobe() const {
+    return nr_tobe;
+}
+
+template<Calitate C>
+void Instr_percutie<C>::setNrTobe(int nrtobe){
+    if(nrtobe<=0)
+        throw Numar_invalid();
+    nr_tobe=nrtobe;
+}
+
+template<Calitate C>
+void Instr_percutie<C>::afisare(std::ostream &out) const {
+    Instrumente::afisare(out);
+    out<<nr_tobe<<" ";
+}
+
+
+template<>
+void Instr_percutie<Calitate::Joasa>::set_Pret() {
+    pret_magazin=get_Pret_produc()+get_Pret_produc()*(7/100);
+}
+template<>
+void Instr_percutie<Calitate::Medie>::set_Pret() {
+    pret_magazin=get_Pret_produc()+get_Pret_produc()*(26/100);
+}
+template<>
+void Instr_percutie<Calitate::Inalta>::set_Pret() {
+    pret_magazin=get_Pret_produc()+get_Pret_produc()*(45/100);
+}
 
 
 template<Calitate C>
 class Instr_clape: public Instrumente, public Id_gen<Instrument::clape>{
+    int nr_clape;
+public:
+    Instr_clape(const std::string numeproducator, const std::string tip, int nr_clape, double pret);
 
+    int getNrClape() const;
+
+    void setNrClape(int nrtobe);
+
+    void afisare(std::ostream &out) const override;
+
+    void set_Pret() override;
 };
 
 
+template<Calitate C>
+Instr_clape<C>::Instr_clape(const std::string numeproducator, const std::string tip, int nr_clape, double pret):
+        Instrumente(numeproducator,tip,pret), nr_clape(nr_clape){}
+
+template<Calitate C>
+int Instr_clape<C>::getNrClape() const {
+    return nr_clape;
+}
+
+template<Calitate C>
+void Instr_clape<C>::setNrClape(int nrclape){
+    if(nrclape<=0)
+        throw Numar_invalid();
+    nr_clape=nrclape;
+}
+
+template<Calitate C>
+void Instr_clape<C>::afisare(std::ostream &out) const {
+    Instrumente::afisare(out);
+    out<<nr_clape<<" ";
+}
+
+
+//template<>
+//void Instr_clape<Calitate::Joasa>::set_Pret() {
+//    pret_magazin=get_Pret_produc()+get_Pret_produc()*(7/100);
+//}
+//template<>
+//void Instr_percutie<Calitate::Medie>::set_Pret() {
+//    pret_magazin=get_Pret_produc()+get_Pret_produc()*(26/100);
+//}
+//template<>
+//void Instr_percutie<Calitate::Inalta>::set_Pret() {
+//    pret_magazin=get_Pret_produc()+get_Pret_produc()*(45/100);
+//}
+
+
+class Magazin_unic{
+        std::vector<std::shared_ptr<Instrumente>> stocul_instrumentelor;
+        static Magazin_unic *instance;
+        Magazin_unic();
+    public:
+        static Magazin_unic* getInstance();
+
+        void add_instrument(std::shared_ptr<Instrumente> instr);
+
+        Magazin_unic(Magazin_unic &ob)=delete;
+
+        Magazin_unic &operator=(const Magazin_unic &ob)=delete;
+};
+
+Magazin_unic* Magazin_unic::instance= nullptr;
+
+Magazin_unic::Magazin_unic()=default;
+
+Magazin_unic *Magazin_unic::getInstance() {
+    if(instance== nullptr)
+        instance= new Magazin_unic();
+    return instance;
+}
+
+void Magazin_unic::add_instrument(std::shared_ptr<Instrumente> instr) {
+    stocul_instrumentelor.push_back(instr);
+}
+
 
 int main(){
+    auto ob=Instr_corzi<Calitate::Joasa>("an","electrc",5,6);
+    ob.setTipElectrAcus("electric");
+
+    if(typeid(ob)== typeid(Instr_corzi<Calitate::Joasa>))
+        std::cout<<"da\n";
+
+    std::cout<< typeid(Instr_corzi<Calitate::Joasa>).name()<<"\n";
+
+    std::cout<<ob;
+
 }
 
 
