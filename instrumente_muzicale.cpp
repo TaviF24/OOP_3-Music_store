@@ -1,3 +1,11 @@
+/*
+    Design pattern-ul folosit este Prototype. Se potriveste proiectului deoarece se pot crea mai multe instrumente muzicale care
+    sunt de acelasi tip, prototipul acesta continand si metoda Clone.
+
+ */
+
+
+
 #include<iostream>
 #include<typeinfo>
 #include<exception>
@@ -91,19 +99,21 @@ std::string Id_gen<I>::get_ID() const{
 template<>
 Id_gen<Instrument::corzi>::Id_gen():ID("In_C"+std::to_string(id_curent++)) {}
 
-template<>
+template<>              //Pt Prototype/Metoda Clone
 Id_gen<Instrument::corzi>::Id_gen(const Id_gen<Instrument::corzi> &ob):ID("In_C"+std::to_string(id_curent++)) {}
+
 
 template<>
 Id_gen<Instrument::percutie>::Id_gen():ID("In_P"+std::to_string(id_curent++)) {}
 
-template<>
+template<>              //Pt Prototype/Metoda Clone
 Id_gen<Instrument::percutie>::Id_gen(const Id_gen<Instrument::percutie> &ob):ID("In_P"+std::to_string(id_curent++)) {}
+
 
 template<>
 Id_gen<Instrument::clape>::Id_gen():ID("In_Cl"+std::to_string(id_curent++)) {}
 
-template<>
+template<>              //Pt Prototype/Metoda Clone
 Id_gen<Instrument::clape>::Id_gen(const Id_gen<Instrument::clape> &ob):ID("In_Cl"+std::to_string(id_curent++)) {}
 
 
@@ -436,15 +446,5 @@ int main(){
     std::cout<<"\n"<<*x<<"\n"<<*y;
 
 
-
-
+//  to be continued...
 }
-
-
-
-
-
-
-//Instrumente
-//Chitaristi cu template un vector ce retine id_ul chitarei, id_gen ?????
-//Tobosari cu template la fel ca mai sus, id_gen
