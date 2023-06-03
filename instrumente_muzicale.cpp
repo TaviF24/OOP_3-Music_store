@@ -382,7 +382,7 @@ Magazin_unic *Magazin_unic::getInstance() {
 
 void Magazin_unic::add_instrument(std::shared_ptr<Instrumente> instr) {
     stocul_instrumentelor.push_back(instr);
-
+//Chitare
     if(typeid(*instr)==typeid(Chitare<Calitate::Joasa>)){
         auto auxiliar=std::dynamic_pointer_cast<Chitare<Calitate::Joasa>>(instr);
         preturi[auxiliar->get_ID()]=auxiliar->get_Pret_produc()+(auxiliar->getNrCorzi()*(float(50)/100) * auxiliar->get_Pret_produc()*(float(5)/100));
@@ -398,7 +398,7 @@ void Magazin_unic::add_instrument(std::shared_ptr<Instrumente> instr) {
         preturi[auxiliar->get_ID()]=auxiliar->get_Pret_produc()+(auxiliar->getNrCorzi()*(float(50)/100) * auxiliar->get_Pret_produc()*(float(45)/100));
     }
 
-//Percutie
+//Tobe
 
     if(typeid(*instr)==typeid(Tobe<Calitate::Joasa>)){
         auto auxiliar=std::dynamic_pointer_cast<Tobe<Calitate::Joasa>>(instr);
@@ -415,7 +415,7 @@ void Magazin_unic::add_instrument(std::shared_ptr<Instrumente> instr) {
         preturi[auxiliar->get_ID()]=auxiliar->get_Pret_produc()+(auxiliar->getNrTobe()*(float(70)/100) * auxiliar->get_Pret_produc()*(float(50)/100));
     }
 
-//Cu clape
+//Orgi
 
     if(typeid(*instr)==typeid(Orgi<Calitate::Joasa>)){
         auto auxiliar=std::dynamic_pointer_cast<Orgi<Calitate::Joasa>>(instr);
@@ -448,6 +448,7 @@ class Producator{
 public:
     virtual ~Producator();
 
+    //Factory Method
     virtual std::shared_ptr<Instrumente> CreateInstr(std::string nume_Producator,std::string tip, float pret_Producator) const = 0;
 
     void Ready(std::string nume_Producator,std::string tip, float pret_Producator) const;
