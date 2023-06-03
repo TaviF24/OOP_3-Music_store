@@ -34,7 +34,7 @@ public:
 };
 
 const char *Numar_invalid::what() const noexcept {
-    return "Numarul ester invalid";
+    return "Numarul este invalid";
 }
 
 
@@ -44,7 +44,7 @@ public:
 };
 
 const char *Tip_invalid::what() const noexcept {
-    return "Tipul ester invalid";
+    return "Tipul este invalid";
 }
 
 
@@ -277,9 +277,19 @@ void Instr_percutie<C>::afisare(std::ostream &out) const {
     out<<nr_tobe<<" ";
 }
 
-template<Calitate C>
-std::shared_ptr<Instrumente> Instr_percutie<C>::Clone() const {
-    return std::make_shared<Instr_percutie<C>>(*this);
+template<>
+std::shared_ptr<Instrumente> Instr_percutie<Calitate::Joasa>::Clone() const {
+    return std::make_shared<Instr_percutie<Calitate::Joasa>>(*this);
+}
+
+template<>
+std::shared_ptr<Instrumente> Instr_percutie<Calitate::Medie>::Clone() const {
+    return std::make_shared<Instr_percutie<Calitate::Medie>>(*this);
+}
+
+template<>
+std::shared_ptr<Instrumente> Instr_percutie<Calitate::Inalta>::Clone() const {
+    return std::make_shared<Instr_percutie<Calitate::Inalta>>(*this);
 }
 
 template<Calitate C>
@@ -321,9 +331,19 @@ void Instr_clape<C>::afisare(std::ostream &out) const {
     out<<nr_clape<<" ";
 }
 
-template<Calitate C>
-std::shared_ptr<Instrumente> Instr_clape<C>::Clone() const {
-    return std::make_shared<Instr_clape<C>>(*this);
+template<>
+std::shared_ptr<Instrumente> Instr_clape<Calitate::Joasa>::Clone() const {
+    return std::make_shared<Instr_clape<Calitate::Joasa>>(*this);
+}
+
+template<>
+std::shared_ptr<Instrumente> Instr_clape<Calitate::Medie>::Clone() const {
+    return std::make_shared<Instr_clape<Calitate::Medie>>(*this);
+}
+
+template<>
+std::shared_ptr<Instrumente> Instr_clape<Calitate::Inalta>::Clone() const {
+    return std::make_shared<Instr_clape<Calitate::Inalta>>(*this);
 }
 
 
@@ -426,7 +446,16 @@ int main(){
     auto ob=Instr_corzi<Calitate::Joasa>("an","electrc",5,6);
     auto ob2=Instr_corzi<Calitate::Medie>("te","va",6,8);
     auto ob3=Instr_percutie<Calitate::Medie>("te","va",6,8);
-    ob.setTipElectrAcus("electric");
+    try{
+        ob.setTipElectrAcus("electr");
+        ob.set_Pret(-10);
+    }
+    catch (const Tip_invalid &ob){
+        std::cout<<ob.what()<<"\n";
+    }
+    catch (const Numar_invalid &ob){
+        std::cout<<ob.what()<<"\n";
+    }
 
     if(typeid(ob)== typeid(Instr_corzi<Calitate::Joasa>))
         std::cout<<"da "<<ob.get_ID()<<" "<<ob3.get_ID()<<"\n";
