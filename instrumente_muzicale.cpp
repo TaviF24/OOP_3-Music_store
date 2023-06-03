@@ -2,8 +2,8 @@
     Design pattern-urile folosite sunt Prototype si Factory Method.
     Prototype se potriveste proiectului deoarece se pot crea mai multe instrumente muzicale care sunt de acelasi tip, prototipul
     acesta continand si metoda Clone.
-    Factory Method se potriveste proiectului deoarece un client isi poate comanda un anumit intrument direct de la furnizor,
-    furnizorul ocupandu-se cu obtinerea produsului cerut.
+    Factory Method se potriveste proiectului deoarece un client isi poate comanda un anumit instrument direct de la producator,
+    producatorul ocupandu-se cu obtinerea produsului cerut.
  */
 
 
@@ -444,56 +444,56 @@ void Magazin_unic::afisare(std::ostream &out) const {
 
 
 
-class Furnizor{
+class Producator{
 public:
-    virtual ~Furnizor();
+    virtual ~Producator();
 
-    virtual std::shared_ptr<Instrumente> FactoryMethod(std::string nume_Producator,std::string tip, float pret_Producator) const = 0;
+    virtual std::shared_ptr<Instrumente> CreateInstr(std::string nume_Producator,std::string tip, float pret_Producator) const = 0;
 
-    void SomeOperation(std::string nume_Producator,std::string tip, float pret_Producator) const;
+    void Ready(std::string nume_Producator,std::string tip, float pret_Producator) const;
 };
 
-Furnizor::~Furnizor()=default;
+Producator::~Producator()=default;
 
-void Furnizor::SomeOperation(std::string nume_Producator, std::string tip, float pret_Producator) const {
-    auto product = FactoryMethod(nume_Producator,tip,pret_Producator);
+void Producator::Ready(std::string nume_Producator, std::string tip, float pret_Producator) const {
+    auto product = CreateInstr(nume_Producator,tip,pret_Producator);
     std::cout<<"Produsul este gata!"<<*product<<"\n";
 }
 
 
 template<Calitate C>
-class Furnizor_chitare : public Furnizor {
+class Producator_chitare : public Producator {
 public:
-    std::shared_ptr<Instrumente> FactoryMethod(std::string nume_Producator,std::string tip, float pret_Producator) const override;
+    std::shared_ptr<Instrumente> CreateInstr(std::string nume_Producator,std::string tip, float pret_Producator) const override;
 };
 
 template<Calitate C>
 std::shared_ptr<Instrumente>
-Furnizor_chitare<C>::FactoryMethod(std::string nume_Producator, std::string tip, float pret_Producator) const {
+Producator_chitare<C>::CreateInstr(std::string nume_Producator, std::string tip, float pret_Producator) const {
     return std::make_shared<Chitare<C>>(nume_Producator,tip,6,pret_Producator);
 }
 
 template<Calitate C>
-class Furnizor_tobe : public Furnizor {
+class Producator_tobe : public Producator {
 public:
-    std::shared_ptr<Instrumente> FactoryMethod(std::string nume_Producator,std::string tip, float pret_Producator) const override;
+    std::shared_ptr<Instrumente> CreateInstr(std::string nume_Producator,std::string tip, float pret_Producator) const override;
 };
 
 template<Calitate C>
 std::shared_ptr<Instrumente>
-Furnizor_tobe<C>::FactoryMethod(std::string nume_Producator, std::string tip, float pret_Producator) const {
+Producator_tobe<C>::CreateInstr(std::string nume_Producator, std::string tip, float pret_Producator) const {
     return std::make_shared<Tobe<C>>(nume_Producator,tip,8,pret_Producator);
 }
 
 template<Calitate C>
-class Furnizor_orgi : public Furnizor {
+class Producator_orgi : public Producator {
 public:
-    std::shared_ptr<Instrumente> FactoryMethod(std::string nume_Producator,std::string tip, float pret_Producator) const override;
+    std::shared_ptr<Instrumente> CreateInstr(std::string nume_Producator,std::string tip, float pret_Producator) const override;
 };
 
 template<Calitate C>
 std::shared_ptr<Instrumente>
-Furnizor_orgi<C>::FactoryMethod(std::string nume_Producator, std::string tip, float pret_Producator) const {
+Producator_orgi<C>::CreateInstr(std::string nume_Producator, std::string tip, float pret_Producator) const {
     return std::make_shared<Orgi<C>>(nume_Producator,tip,160,pret_Producator);
 }
 
@@ -502,14 +502,14 @@ class Client{
 public:
        Client();
 
-       void comanda_speciala(const Furnizor& furnizor, std::string nume_Producator,std::string tip, float pret_Producator) const;
+       void comanda_speciala(const Producator& producator, std::string nume_Producator,std::string tip, float pret_Producator) const;
 
 };
 
 Client::Client()=default;
 
-void Client::comanda_speciala(const Furnizor &furnizor, std::string nume_Producator, std::string tip, float pret_Producator) const{
-    furnizor.SomeOperation(nume_Producator,tip,pret_Producator);
+void Client::comanda_speciala(const Producator &producator, std::string nume_Producator, std::string tip, float pret_Producator) const{
+    producator.Ready(nume_Producator,tip,pret_Producator);
 }
 
 
@@ -553,16 +553,16 @@ int main(){
     std::cout<<"Ce instrument doriti sa comandati?\n1.Chitara\n2.Tobe\n3.Clape\n";std::cin>>operatie;
     switch (operatie) {
         case 1:{
-            Furnizor_chitare<Calitate::Inalta> f_chitare;
-            client1.comanda_speciala(f_chitare,"Fender","electric",7500);
+            Producator_chitare<Calitate::Inalta> p_chitare;
+            client1.comanda_speciala(p_chitare,"Fender","electric",7500);
             break;}
         case 2:{
-            Furnizor_tobe<Calitate::Medie> f_tobe;
-            client1.comanda_speciala(f_tobe,"Yamaha","electric",4500);
+            Producator_tobe<Calitate::Medie> p_tobe;
+            client1.comanda_speciala(p_tobe,"Yamaha","electric",4500);
             break;}
         case 3:{
-            Furnizor_orgi<Calitate::Joasa> f_orgi;
-            client1.comanda_speciala(f_orgi,"Yamaha","electric",3000);
+            Producator_orgi<Calitate::Joasa> p_orgi;
+            client1.comanda_speciala(p_orgi,"Yamaha","electric",3000);
             break;
         }
     }
