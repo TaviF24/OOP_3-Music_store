@@ -77,8 +77,8 @@ build oop3: CXX_EXECUTABLE_LINKER__oop3_Debug CMakeFiles/oop3.dir/main.cpp.o
 
 build cmake_object_order_depends_target_FILE0: phony || CMakeFiles/FILE0.dir
 
-build CMakeFiles/FILE0.dir/instrumente_muzicale.cpp.o: CXX_COMPILER__FILE0_Debug /Users/octavianfarcasi/Desktop/oop3/instrumente_muzicale.cpp || cmake_object_order_depends_target_FILE0
-  DEP_FILE = CMakeFiles/FILE0.dir/instrumente_muzicale.cpp.o.d
+build CMakeFiles/FILE0.dir/Music_store.cpp.o: CXX_COMPILER__FILE0_Debug /Users/octavianfarcasi/Desktop/oop3/Music_store.cpp || cmake_object_order_depends_target_FILE0
+  DEP_FILE = CMakeFiles/FILE0.dir/Music_store.cpp.o.d
   FLAGS = -g -arch x86_64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics -std=gnu++17
   OBJECT_DIR = CMakeFiles/FILE0.dir
   OBJECT_FILE_DIR = CMakeFiles/FILE0.dir
@@ -91,7 +91,7 @@ build CMakeFiles/FILE0.dir/instrumente_muzicale.cpp.o: CXX_COMPILER__FILE0_Debug
 #############################################
 # Link the executable FILE0
 
-build FILE0: CXX_EXECUTABLE_LINKER__FILE0_Debug CMakeFiles/FILE0.dir/instrumente_muzicale.cpp.o
+build FILE0: CXX_EXECUTABLE_LINKER__FILE0_Debug CMakeFiles/FILE0.dir/Music_store.cpp.o
   FLAGS = -g -arch x86_64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk
   OBJECT_DIR = CMakeFiles/FILE0.dir
   POST_BUILD = :
